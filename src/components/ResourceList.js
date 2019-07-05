@@ -1,29 +1,44 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
-class ResourceList extends React.Component {
-    state = { resources: [] };
 
-    async componentDidMount() {
-        const response = await axios.get(`https://jsonplaceholder.typicode.com/${this.props.resource}`);
 
-        this.setState({ resources: response.data });
-    }
 
-    // prevProps is used as a check to prevent calling the service again
-    async componentDidUpdate(prevProps) {
-        if (prevProps.resource !== this.props.resource) {
-            const response = await axios.get(`https://jsonplaceholder.typicode.com/${this.props.resource}`);
+const ResourceList = ({ resource }) => {
+    const [resources, setResources] = useState([]);
 
-            this.setState({ resources: response.data });
-        }
-    }
+    // const fetchResource = async () => {
+    //     const response = await axios.get(`https://jsonplaceholder.typicode.com/${resource}`);
 
-    render() {
-        return (
-            <div>{this.state.resources.length}</div>
-        );
-    };
+    //     setResources(response.data);
+    // }
+
+    // lol, adding the resource object in the array was the solution as to why the fetchResource was not calling the service again.
+    // the second argument checks for a different value, if different, fetchResource will be called, if not different, useEffect will choose not 
+    // to call fetchResource again.
+    // RULE: you cannot invoke the above directly in the useEffect, however you can wrap the code in parenthesis, and invoke the function as shown below
+    useEffect(
+        () => {
+            (
+                async () => {
+                    const response = await axios.get(`https://jsonplaceholder.typicode.com/${resource}`);
+
+                    setResources(response.data);
+                }
+            )(resource);
+            // fetchResource(resource);
+        },
+        [resource]
+    );
+
+
+    return (
+        <ul>
+            {resources.map(record =>
+                <li key={record.id}>{record.title}</li>
+            )}
+        </ul>
+    );
 }
 
 export default ResourceList;
