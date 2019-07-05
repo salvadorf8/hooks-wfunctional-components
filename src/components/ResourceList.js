@@ -2,16 +2,9 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
 
-
-
-const ResourceList = ({ resource }) => {
+// putting all the logic in a function is an improvement because there is no tie to any component
+const useResources = (resource) => {
     const [resources, setResources] = useState([]);
-
-    // const fetchResource = async () => {
-    //     const response = await axios.get(`https://jsonplaceholder.typicode.com/${resource}`);
-
-    //     setResources(response.data);
-    // }
 
     // lol, adding the resource object in the array was the solution as to why the fetchResource was not calling the service again.
     // the second argument checks for a different value, if different, fetchResource will be called, if not different, useEffect will choose not 
@@ -26,10 +19,18 @@ const ResourceList = ({ resource }) => {
                     setResources(response.data);
                 }
             )(resource);
-            // fetchResource(resource);
         },
         [resource]
     );
+
+    return resources;
+};
+
+
+const ResourceList = ({ resource }) => {
+    const resources = useResources(resource);
+
+ 
 
 
     return (
