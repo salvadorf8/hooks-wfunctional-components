@@ -17,7 +17,6 @@ const App = () => {
                 <button onClick={() => handleClick('posts')}>Posts</button>
                 <button onClick={() => handleClick('todos')}>Todos</button>
             </div>
-            <div>what I got: {resource}</div>
             <ResourceList resource={resource} />
         </div>
     );
