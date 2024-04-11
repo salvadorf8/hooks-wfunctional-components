@@ -6,16 +6,21 @@ import UserList from './UserList';
 const App = () => {
     const [resource, setResource] = useState('posts');
 
-        return (
+    const handleClick = (option) => {
+        setResource(option);
+    };
+
+    return (
+        <div>
+            <UserList />
             <div>
-                <UserList />
-                <div>
-                    <button onClick={() => setResource('posts')}>Posts</button>
-                    <button onClick={() => setResource('todos')}>Todos</button>
-                </div>
-                <ResourceList resource={resource} />
+                <button onClick={() => handleClick('posts')}>Posts</button>
+                <button onClick={() => handleClick('todos')}>Todos</button>
             </div>
-        );
-}
+            <div>what I got: {resource}</div>
+            <ResourceList resource={resource} />
+        </div>
+    );
+};
 
 export default App;
